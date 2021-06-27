@@ -18,19 +18,21 @@ class DefaultController extends AbstractController
     {
         $name = 'Sérgio Santos !';
 
-        $product = new Product();
-        $product->setName('Produto Teste 2');
-        $product->setDescription('Descrição 2');
-        $product->setBody('Info Produto 2');
-        $product->setSlug('produto-test-2');
-        $product->setPrice(2990);
-        $product->setCreatedAt(new DateTimeImmutable('now', new DateTimeZone('Europe/Lisbon')));
-        $product->setUpdatedAt(new DateTimeImmutable('now', new DateTimeZone('Europe/Lisbon')));
+        /*******  Buscar todos os produtos *******/
+        // $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
+        // dump($products);
 
-        $manager = $this->getDoctrine()->getManager();
-        $manager->persist($product);
-        $manager->flush();
+        /*******  Buscar um produto especifico *******/
+        // $products = $this->getDoctrine()->getRepository(Product::class)->find(2);
+        // print($products->getName());
+        // dump($products);
 
+        /*******  Buscar um produto por slug *******/
+        // $products = $this->getDoctrine()->getRepository(Product::class)->findOneBy(['price' => 2990]);
+        // $products = $this->getDoctrine()->getRepository(Product::class)->findOneByPrice(2990);
+        // $products = $this->getDoctrine()->getRepository(Product::class)->findBy(['id' => 2]);
+        // $products = $this->getDoctrine()->getRepository(Product::class)->findBySlug('produto-test-2');
+        // dump($products);
 
         // return $this->render('index.html.twig', [
         //     'name' => $name
