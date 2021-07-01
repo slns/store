@@ -12,7 +12,7 @@
 
 
 		<div class="col-12">
-			<form action="/admin/product/update/{{ product.id }}" method="post">
+			<form action="{{ path('admin_update_products', { product: product.id }) }}" method="post">
 
 				<div class="form-group">
 					<label>Nome do Produto</label>
