@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -29,29 +30,35 @@ class ProductController extends AbstractController
      */
     public function create(): ?Response
     {
-        return null;
+        return $this->render('admin/product/create.html.twig');
     }
 
     /**
      * @Route("/store", name="store_products", methods={"POST"})
      */
-    public function store(): ?Response
+    public function store(Request $request): Response
     {
-        // Registrar
-        $product = new Product();
-        $product->setName('Produto Teste 2');
-        $product->setDescription('Descrição 2');
-        $product->setBody('Info Produto 2');
-        $product->setSlug('produto-test-2');
-        $product->setPrice(2990);
-        $product->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon')));
-        $product->setUpdatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon')));
+        try {
+            $data = $request->request->all();
 
-        $manager = $this->getDoctrine()->getManager();
-        $manager->persist($product);
-        $manager->flush();
+            $product = new Product();
+            $product->setName($data['name']);
+            $product->setDescription($data['description']);
+            $product->setBody($data['body']);
+            $product->setSlug($data['slug']);
+            $product->setPrice($data['price']);
 
-        return null;
+            $product->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon')));
+            $product->setUpdatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon')));
+
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($product);
+            $manager->flush();
+
+            return $this->redirectToRoute('admin_index_products');
+        } catch (\Exception $e) {
+            exit($e->getMessage());
+        }
     }
 
     /**
