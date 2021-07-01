@@ -19,7 +19,7 @@ class ProductController extends AbstractController
     {
         // Buscar todos os produtos
         $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
-        var_dump($products);
+        ///var_dump($products);
 
         return $this->render('admin/product/index.html.twig', compact('products'));
     }
@@ -27,14 +27,15 @@ class ProductController extends AbstractController
     /**
      * @Route("/create", name="create_products")
      */
-    public function create(): Response
+    public function create(): ?Response
     {
+        return null;
     }
 
     /**
      * @Route("/store", name="store_products", methods={"POST"})
      */
-    public function store(): Response
+    public function store(): ?Response
     {
         // Registrar
         $product = new Product();
@@ -43,12 +44,14 @@ class ProductController extends AbstractController
         $product->setBody('Info Produto 2');
         $product->setSlug('produto-test-2');
         $product->setPrice(2990);
-        $product->setCreatedAt(new DateTimeImmutable('now', new DateTimeZone('Europe/Lisbon')));
-        $product->setUpdatedAt(new DateTimeImmutable('now', new DateTimeZone('Europe/Lisbon')));
+        $product->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon')));
+        $product->setUpdatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon')));
 
         $manager = $this->getDoctrine()->getManager();
         $manager->persist($product);
         $manager->flush();
+
+        return null;
     }
 
     /**
@@ -56,10 +59,10 @@ class ProductController extends AbstractController
      *
      * @param mixed $product
      */
-    public function edit($product): Response
+    public function edit($product): ?Response
     {
         // Buscar um produto especifico
-        $products = $this->getDoctrine()->getRepository(Product::class)->find($product);
+        return $this->getDoctrine()->getRepository(Product::class)->find($product);
     }
 
     /**
@@ -67,16 +70,18 @@ class ProductController extends AbstractController
      *
      * @param mixed $product
      */
-    public function update($product): Response
+    public function update($product): ?Response
     {
         // Atualizar
         $product = $this->getDoctrine()->getRepository(Product::class)->find($product);
 
         $product->setName('Produto Teste Editado');
-        $product->setUpdatedAt(new DateTimeImmutable('now', new DateTimeZone('Europe/Lisbon')));
+        $product->setUpdatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon')));
 
         $manager = $this->getDoctrine()->getManager();
         $manager->flush();
+
+        return $product;
     }
 
     /**
@@ -84,7 +89,7 @@ class ProductController extends AbstractController
      *
      * @param mixed $product
      */
-    public function remove($product): Response
+    public function remove($product): ?Response
     {
         // Remover
         $product = $this->getDoctrine()->getRepository(Product::class)->find($product);
@@ -92,5 +97,7 @@ class ProductController extends AbstractController
         $manager = $this->getDoctrine()->getManager();
         $manager->remove($product);
         $manager->flush();
+
+        return $product;
     }
 }
