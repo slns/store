@@ -69,7 +69,9 @@ class ProductController extends AbstractController
     public function edit($product): ?Response
     {
         // Buscar um produto especifico
-        return $this->getDoctrine()->getRepository(Product::class)->find($product);
+        $product = $this->getDoctrine()->getRepository(Product::class)->find($product);
+
+        return $this->render('admin/product/edit.html.twig', compact('product'));
     }
 
     /**
@@ -77,18 +79,29 @@ class ProductController extends AbstractController
      *
      * @param mixed $product
      */
-    public function update($product): ?Response
+    public function update($product, Request $request): ?Response
     {
         // Atualizar
-        $product = $this->getDoctrine()->getRepository(Product::class)->find($product);
+        try {
+            $data = $request->request->all();
 
-        $product->setName('Produto Teste Editado');
-        $product->setUpdatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon')));
+            $product = $this->getDoctrine()->getRepository(Product::class)->find($product);
 
-        $manager = $this->getDoctrine()->getManager();
-        $manager->flush();
+            $product->setName($data['name']);
+            $product->setDescription($data['description']);
+            $product->setBody($data['body']);
+            $product->setSlug($data['slug']);
+            $product->setPrice($data['price']);
 
-        return $product;
+            $product->setUpdatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon')));
+
+            $manager = $this->getDoctrine()->getManager();
+            $manager->flush();
+
+            return $this->redirectToRoute('admin_edit_products', ['product' => $product->getId()]);
+        } catch (\Exception $e) {
+            exit($e->getMessage());
+        }
     }
 
     /**
