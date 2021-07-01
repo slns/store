@@ -55,6 +55,8 @@ class ProductController extends AbstractController
             $manager->persist($product);
             $manager->flush();
 
+            $this->addFlash('success', 'Produto criado com sucesso.');
+
             return $this->redirectToRoute('admin_index_products');
         } catch (\Exception $e) {
             exit($e->getMessage());
@@ -98,6 +100,8 @@ class ProductController extends AbstractController
             $manager = $this->getDoctrine()->getManager();
             $manager->flush();
 
+            $this->addFlash('success', 'Produto atualizado com sucesso.');
+
             return $this->redirectToRoute('admin_edit_products', ['product' => $product->getId()]);
         } catch (\Exception $e) {
             exit($e->getMessage());
@@ -118,6 +122,8 @@ class ProductController extends AbstractController
             $manager = $this->getDoctrine()->getManager();
             $manager->remove($product);
             $manager->flush();
+
+            $this->addFlash('success', 'Produto apagado com sucesso.');
 
             return $this->redirectToRoute('admin_index_products');
         } catch (\Exception $e) {
