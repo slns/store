@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+
 use App\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +19,7 @@ class ProductController extends AbstractController
      */
     public function index(): Response
     {
+        dump('test');
         // Buscar todos os produtos
         $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
         ///var_dump($products);
