@@ -12,13 +12,7 @@
 
 
 		<div class="col-12">
-			{{ form_start(form) }}
-			{{ form_widget(form) }}
-
-			<button type="submit" class="btn btn-lg btn-success">
-				Atualizar Produto
-			</button>
-			{{ form_end(form) }}
+			{% include 'admin/product/_form.html.twig'  with { 'buttonText': 'Atualizar Produto'} %}
 		</div>
 	</div>
 {% endblock %}

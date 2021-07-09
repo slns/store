@@ -1,0 +1,25 @@
+{{ form_start(form, { 'attr': { 'novalidate': 'novalidate'}}) }}
+
+				{{ form_row(form.name, { 'attr': { 'placeholder': 'Placeholder html input'}}) }}
+
+{#				<div class="form-group ">#}
+{#					{{ form_label(form.name) }}#}
+{#					{{ form_widget(form.name) }}#}
+{#					{{ form_help(form.name) }}#}
+{#				</div>#}
+
+				{{ form_row(form.description) }}
+
+				{{ form_row(form.body) }}
+
+				{{ form_row(form.price) }}
+
+				{{ form_row(form.slug) }}
+
+				{{ form_row(form.category) }}
+
+                <button type="submit" class="btn btn-lg btn-success">
+                    {{ buttonText }}
+                </button>
+
+{{ form_end(form) }}

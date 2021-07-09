@@ -38,7 +38,7 @@ class ProductController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $product = $form->getData();
             $product->setCreatedAt();
             $product->setUpdatedAt();
@@ -69,7 +69,7 @@ class ProductController extends AbstractController
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted()  && $form->isValid()) {
             $product = $form->getData();
             $product->setUpdatedAt();
             // dd( $product);
