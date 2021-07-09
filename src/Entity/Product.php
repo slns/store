@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
@@ -52,6 +55,16 @@ class Product
      * @ORM\Column(type="datetime_immutable", options={"default": "CURRENT_TIMESTAMP"})
      */
     private $updatedAt;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="product")
+     */
+    private $category;
+
+    public function __construct()
+    {
+        $this->category = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -123,9 +136,12 @@ class Product
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    /**
+     * @throws Exception
+     */
+    public function setCreatedAt(?\DateTimeImmutable $createdAt = null): self
     {
-        $this->createdAt = $createdAt;
+        $this->createdAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon'));
 
         return $this;
     }
@@ -135,10 +151,38 @@ class Product
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
+    /**
+     * @throws Exception
+     */
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt  = null): self
     {
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon'));
 
         return $this;
     }
+
+    /**
+     * @return Collection|Category[]
+     */
+    public function getCategory(): Collection
+    {
+        return $this->category;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->category->contains($category)) {
+            $this->category[] = $category;
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        $this->category->removeElement($category);
+
+        return $this;
+    }
+
 }

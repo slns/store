@@ -12,40 +12,15 @@
 
 
 		<div class="col-12">
-			<form action="{{ path('admin_store_products') }}" method="post">
 
-				<div class="form-group">
-					<label>Nome do Produto</label>
-					<input type="text" class="form-control" name="name">
-				</div>
+			{{ form_start(form) }}
+				{{ form_widget(form) }}
 
-				<div class="form-group">
-					<label>Descrição</label>
-					<input type="text" class="form-control" name="description">
-				</div>
+			<button type="submit" class="btn btn-lg btn-success">
+				Criar Produto
+			</button>
+			{{ form_end(form) }}
 
-				<div class="form-group">
-					<label>Contéudo/Informação</label>
-					<textarea class="form-control" name="body"></textarea>
-				</div>
-
-				<div class="form-group">
-					<label>Slug</label>
-					<input type="text" class="form-control" name="slug">
-				</div>
-
-				<div class="form-group">
-					<label>Preço</label>
-					<input type="text" class="form-control" name="price">
-				</div>
-
-				<div class="form-group">
-					<button class="btn btn-lg btn-success">
-						Criar Produto
-					</button>
-				</div>
-
-			</form>
 		</div>
 	</div>
 {% endblock %}

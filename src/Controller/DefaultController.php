@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Address;
+use App\Entity\Category;
 use App\Entity\Order;
 use App\Entity\Product;
 use App\Entity\User;
@@ -14,10 +15,17 @@ class DefaultController extends AbstractController
 {
     /**
      * @Route("/", name="default")
+     * @throws \Exception
      */
     public function index(): Response
     {
         $name = 'Sérgio Santos !';
+        $user = $this->getDoctrine()->getRepository(User::class)->find(2);
+//        $order = $this->getDoctrine()->getRepository(Order::class)->find(1);
+//
+//        $user->removeOrder($order);
+//
+//        $this->getDoctrine()->getManager()->flush();
 
         // Buscar todos os produtos
         // $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
@@ -41,31 +49,31 @@ class DefaultController extends AbstractController
 
         // $manager = $this->getDoctrine()->getManager();
 
-        // $manager->persist($user);
-        // $manager->flush();
 
-        // $address = new Address();
-        // $address->setAddress('Rua Teste');
-        // $address->setNumber(100);
-        // $address->setNeighborhood('Bairro');
-        // $address->setCity('Matosinhos');
-        // $address->setState('Porto');
-        // $address->setZipcode('4000-000');
-        // // $address->setUser($user);
+//         $address = new Address();
+//         $address->setAddress('Rua Teste');
+//         $address->setNumber(100);
+//         $address->setNeighborhood('Bairro');
+//         $address->setCity('Matosinhos');
+//         $address->setState('Porto');
+//         $address->setZipcode('4000-000');
+//         $address->setUser($user);
+//
+//         $manager->persist($address);
+//         $manager->flush();
 
-        // $user = new User();
-        // $user->setFirstName('Utilizador');
-        // $user->setLastName('Teste');
-        // $user->setEmail('test@email.pt');
-        // $user->setPassword('123456');
-        // $user->setCreateAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon')));
-        // $user->setUpdatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon')));
+         /*$user = new User();
+         $user->setFirstName('Utilizador');
+         $user->setLastName('Teste');
+         $user->setEmail('test@email.pt');
+         $user->setPassword('123456');
+         $user->setCreateAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon')));
+         $user->setUpdatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon')));
         // $user->setAddress($address);
+         $manager->persist($user);
+         $manager->flush();
 
-        // $manager->persist($user);
-        // $manager->flush();
-
-        $user = $this->getDoctrine()->getRepository(user::class)->find(2);
+       //  $user = $this->getDoctrine()->getRepository(user::class)->find(2);
         // dump($user->getOrder()->toArray());
 
         $order = new Order();
@@ -76,7 +84,23 @@ class DefaultController extends AbstractController
         $order->setUpdatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon')));
 
         $this->getDoctrine()->getManager()->persist($order);
-        $this->getDoctrine()->getManager()->flush();
+        $this->getDoctrine()->getManager()->flush();*/
+
+        // Produto e Categoria
+//        $product = $this->getDoctrine()->getRepository(Product::class)->find(1);
+//        dump($product->getCategories()->toArray());
+        /*
+        $category = new Category();
+        $category->setName('Games');
+        $category->setSlug('games');
+        $category->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon')));
+        $category->setUpdatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon')));
+
+        $product->setCategory($category);
+
+
+         $this->getDoctrine()->getManager()->persist($category);
+        $this->getDoctrine()->getManager()->flush();*/
 
         return $this->render('index.html.twig', compact('name', 'user'));
     }
