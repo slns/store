@@ -10,6 +10,7 @@ use App\Service\UploadService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,13 +25,26 @@ class ProductController extends AbstractController
      */
     public function index(ProductRepository $productRepository, UploadService $uploadService): Response
     {
-        dump($uploadService->upload());
-//        dump('test');
+        // dump($uploadService->upload());
         // Buscar todos os produtos
         $products = $productRepository->findAll();
         ///var_dump($products);
 
         return $this->render('admin/product/index.html.twig', compact('products'));
+    }
+
+    /**
+     * @Route("/upload")
+     * @throws Exception
+     */
+    public function upload(Request $request, UploadService $uploadService): Response
+    {
+        /** @var UploadedFile[] $photos */
+        $photos = $request->files->get('photos');
+        // $folder = $this->getParameter('upload_dir') . '/products';
+        $uploadService->upload($photos, 'products');
+
+        return new Response('Upload');
     }
 
     /**
