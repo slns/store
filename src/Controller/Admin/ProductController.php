@@ -5,6 +5,10 @@ namespace App\Controller\Admin;
 
 use App\Entity\Product;
 use App\Form\ProductType;
+use App\Repository\ProductRepository;
+use App\Service\UploadService;
+use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,11 +22,12 @@ class ProductController extends AbstractController
     /**
      * @Route("/", name="index_products")
      */
-    public function index(): Response
+    public function index(ProductRepository $productRepository, UploadService $uploadService): Response
     {
-        dump('test');
+        dump($uploadService->upload());
+//        dump('test');
         // Buscar todos os produtos
-        $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
+        $products = $productRepository->findAll();
         ///var_dump($products);
 
         return $this->render('admin/product/index.html.twig', compact('products'));
@@ -30,9 +35,9 @@ class ProductController extends AbstractController
 
     /**
      * @Route("/create", name="create_products")
-     * @throws \Exception
+     * @throws Exception
      */
-    public function create(Request $request): ?Response
+    public function create(Request $request, EntityManagerInterface $em): ?Response
     {
         $form = $this->createForm(ProductType::class, new Product());
 
@@ -43,8 +48,8 @@ class ProductController extends AbstractController
             $product->setCreatedAt();
             $product->setUpdatedAt();
             // dd( $product);
-            $this->getDoctrine()->getManager()->persist($product);
-            $this->getDoctrine()->getManager()->flush();
+            $em->persist($product);
+            $em->flush();
 
             $this->addFlash('success', 'Produto criado com sucesso.');
 
@@ -61,19 +66,19 @@ class ProductController extends AbstractController
      *
      * @param mixed $product
      */
-    public function edit($product, Request $request): ?Response
+    public function edit($product, Request $request, ProductRepository $productRepository, EntityManagerInterface $em): ?Response
     {
         // Buscar um produto especifico
-        $product = $this->getDoctrine()->getRepository(Product::class)->find($product);
+        $product = $productRepository->find($product);
 
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()  && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $product = $form->getData();
             $product->setUpdatedAt();
             // dd( $product);
-            $this->getDoctrine()->getManager()->flush();
+            $em->flush();
 
             $this->addFlash('success', 'Produto atualizado com sucesso.');
 
@@ -91,20 +96,20 @@ class ProductController extends AbstractController
      *
      * @param mixed $product
      */
-    public function remove($product): ?Response
+    public function remove($product, ProductRepository $productRepository, EntityManagerInterface $em): ?Response
     {
         // Remover
         try {
-            $product = $this->getDoctrine()->getRepository(Product::class)->find($product);
+            $product = $productRepository->find($product);
 
-            $manager = $this->getDoctrine()->getManager();
-            $manager->remove($product);
-            $manager->flush();
+           // $manager = $this->getDoctrine()->getManager();
+            $em->remove($product);
+            $em->flush();
 
             $this->addFlash('success', 'Produto apagado com sucesso.');
 
             return $this->redirectToRoute('admin_index_products');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             exit($e->getMessage());
         }
     }
