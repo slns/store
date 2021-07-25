@@ -69,9 +69,9 @@ class Product
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity=ProductPhoto::class, mappedBy="product", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=ProductPhoto::class, mappedBy="product", orphanRemoval=true, cascade={"persist"})
      */
-    private $productPhotos;
+    private $photos;
 
     public function __construct()
     {
@@ -198,27 +198,24 @@ class Product
         return $this;
     }
 
-    /**
-     * @return Collection|ProductPhoto[]
-     */
-    public function getProductPhotos(): Collection
+    public function getPhotos()
     {
-        return $this->productPhotos;
+        return $this->photos;
     }
 
-    public function addProductPhoto(ProductPhoto $productPhoto): self
+    public function addPhoto(ProductPhoto $productPhoto): self
     {
-        if (!$this->productPhotos->contains($productPhoto)) {
-            $this->productPhotos[] = $productPhoto;
+        if (!$this->photos->contains($productPhoto)) {
+            $this->photos[] = $productPhoto;
             $productPhoto->setProduct($this);
         }
 
         return $this;
     }
 
-    public function removeProductPhoto(ProductPhoto $productPhoto): self
+    public function removePhoto(ProductPhoto $productPhoto): self
     {
-        if ($this->productPhotos->removeElement($productPhoto)) {
+        if ($this->photos->removeElement($productPhoto)) {
             // set the owning side to null (unless already changed)
             if ($productPhoto->getProduct() === $this) {
                 $productPhoto->setProduct(null);

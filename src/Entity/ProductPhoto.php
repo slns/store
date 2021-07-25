@@ -34,7 +34,7 @@ class ProductPhoto
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="productPhotos")
+     * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="productPhotos", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $product;
@@ -61,9 +61,9 @@ class ProductPhoto
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function setCreatedAt(): self
     {
-        $this->createdAt = $createdAt;
+        $this->createdAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon'));
 
         return $this;
     }
@@ -73,9 +73,9 @@ class ProductPhoto
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
+    public function setUpdatedAt(): self
     {
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon'));
 
         return $this;
     }

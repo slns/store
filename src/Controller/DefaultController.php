@@ -15,6 +15,7 @@ class DefaultController extends AbstractController
 {
     /**
      * @Route("/", name="default")
+     *
      * @throws \Exception
      */
     public function index(): Response
@@ -49,7 +50,6 @@ class DefaultController extends AbstractController
 
         // $manager = $this->getDoctrine()->getManager();
 
-
 //         $address = new Address();
 //         $address->setAddress('Rua Teste');
 //         $address->setNumber(100);
@@ -62,16 +62,16 @@ class DefaultController extends AbstractController
 //         $manager->persist($address);
 //         $manager->flush();
 
-         /*$user = new User();
-         $user->setFirstName('Utilizador');
-         $user->setLastName('Teste');
-         $user->setEmail('test@email.pt');
-         $user->setPassword('123456');
-         $user->setCreateAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon')));
-         $user->setUpdatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon')));
+        /*$user = new User();
+        $user->setFirstName('Utilizador');
+        $user->setLastName('Teste');
+        $user->setEmail('test@email.pt');
+        $user->setPassword('123456');
+        $user->setCreateAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon')));
+        $user->setUpdatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon')));
         // $user->setAddress($address);
-         $manager->persist($user);
-         $manager->flush();
+        $manager->persist($user);
+        $manager->flush();
 
        //  $user = $this->getDoctrine()->getRepository(user::class)->find(2);
         // dump($user->getOrder()->toArray());

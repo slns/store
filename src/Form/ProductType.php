@@ -28,8 +28,11 @@ class ProductType extends AbstractType
             ->add('price', TextType::class, [
                 'label' => 'Preço'
             ])
+            ->add('photos', FileType::class, [
+                'mapped' => false,
+                'multiple' => true,
+            ])
             ->add('slug')
-            ->add('photo', FileType::class)
             ->add('category', null, [
                 'label' => 'Categorias',
                 // 'multiple' => false,

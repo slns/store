@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 
 use App\Entity\Product;
+use App\Entity\ProductPhoto;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use App\Service\UploadService;
@@ -51,7 +52,7 @@ class ProductController extends AbstractController
      * @Route("/create", name="create_products")
      * @throws Exception
      */
-    public function create(Request $request, EntityManagerInterface $em): ?Response
+    public function create(Request $request, EntityManagerInterface $em, UploadService $uploadService): ?Response
     {
         $form = $this->createForm(ProductType::class, new Product());
 
@@ -62,6 +63,19 @@ class ProductController extends AbstractController
             $product->setCreatedAt();
             $product->setUpdatedAt();
             // dd( $product);
+
+            $photosUpload = $form['photos']->getData();
+            if ($photosUpload) {
+                $photosUpload = $uploadService->upload($photosUpload, 'products');
+                foreach ($photosUpload as $key => $value) {
+                    $photosUpload = new ProductPhoto();
+                    $photosUpload->setPhoto($value);
+                    $photosUpload->setCreatedAt();
+                    $photosUpload->setUpdatedAt();
+
+                    $product->addPhoto($photosUpload);
+                }
+            }
             $em->persist($product);
             $em->flush();
 
