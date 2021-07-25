@@ -59,22 +59,18 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Product $product */
             $product = $form->getData();
             $product->setCreatedAt();
             $product->setUpdatedAt();
-            // dd( $product);
+            //  dd( $product);
 
             $photosUpload = $form['photos']->getData();
             if ($photosUpload) {
                 $photosUpload = $uploadService->upload($photosUpload, 'products');
-                foreach ($photosUpload as $key => $value) {
-                    $photosUpload = new ProductPhoto();
-                    $photosUpload->setPhoto($value);
-                    $photosUpload->setCreatedAt();
-                    $photosUpload->setUpdatedAt();
-
-                    $product->addPhoto($photosUpload);
-                }
+                // dd($photosUpload);
+                $photosUpload = $this->makeProductPhotoEntities($photosUpload);
+                $product->addManyProductPhoto($photosUpload);
             }
             $em->persist($product);
             $em->flush();
@@ -93,8 +89,14 @@ class ProductController extends AbstractController
      * @Route("/edit/{product}", name="edit_products")
      *
      * @param mixed $product
+     * @throws Exception
      */
-    public function edit($product, Request $request, ProductRepository $productRepository, EntityManagerInterface $em): ?Response
+    public function edit(
+        $product, Request $request,
+        ProductRepository $productRepository,
+        EntityManagerInterface $em,
+        UploadService $uploadService
+    ): ?Response
     {
         // Buscar um produto especifico
         $product = $productRepository->find($product);
@@ -105,7 +107,16 @@ class ProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $product = $form->getData();
             $product->setUpdatedAt();
-            // dd( $product);
+            //  dd( $product);
+
+            $photosUpload = $form['photos']->getData();
+            if ($photosUpload) {
+                $photosUpload = $uploadService->upload($photosUpload, 'products');
+                // dd($photosUpload);
+                $photosUpload = $this->makeProductPhotoEntities($photosUpload);
+                $product->addManyProductPhoto($photosUpload);
+            }
+
             $em->flush();
 
             $this->addFlash('success', 'Produto atualizado com sucesso.');
@@ -115,7 +126,8 @@ class ProductController extends AbstractController
         }
 
         return $this->render('admin/product/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'productPhotos' => $product->getProductPhotos()
         ]);
     }
 
@@ -130,7 +142,7 @@ class ProductController extends AbstractController
         try {
             $product = $productRepository->find($product);
 
-           // $manager = $this->getDoctrine()->getManager();
+            // $manager = $this->getDoctrine()->getManager();
             $em->remove($product);
             $em->flush();
 
@@ -140,5 +152,18 @@ class ProductController extends AbstractController
         } catch (Exception $e) {
             exit($e->getMessage());
         }
+    }
+
+    private function makeProductPhotoEntities($photosUpload)
+    {
+        $entities = [];
+        foreach ($photosUpload as $photo) {
+            $productPhoto = new ProductPhoto();
+            $productPhoto->setPhoto($photo);
+            $productPhoto->setCreatedAt();
+            $productPhoto->setUpdatedAt();
+            $entities[] = $productPhoto;
+        }
+        return $entities;
     }
 }

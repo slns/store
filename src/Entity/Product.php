@@ -71,7 +71,7 @@ class Product
     /**
      * @ORM\OneToMany(targetEntity=ProductPhoto::class, mappedBy="product", orphanRemoval=true, cascade={"persist"})
      */
-    private $photos;
+    private $productPhotos;
 
     public function __construct()
     {
@@ -198,15 +198,31 @@ class Product
         return $this;
     }
 
-    public function getPhotos()
+    /**
+     * @return Collection|ProductPhoto[]
+     */
+    public function getProductPhotos(): Collection
     {
-        return $this->photos;
+        return $this->productPhotos;
     }
 
-    public function addPhoto(ProductPhoto $productPhoto): self
+    /**
+     * @param array $productPhotoEntities
+     * @return $this
+     */
+    public function addManyProductPhoto(array $productPhotoEntities): self
     {
-        if (!$this->photos->contains($productPhoto)) {
-            $this->photos[] = $productPhoto;
+        foreach ($productPhotoEntities as $entity)
+        {
+            $this->addProductPhoto($entity);
+        }
+        return $this;
+    }
+
+    public function addProductPhoto(ProductPhoto $productPhoto): self
+    {
+        if (!$this->productPhotos->contains($productPhoto)) {
+            $this->productPhotos[] = $productPhoto;
             $productPhoto->setProduct($this);
         }
 
@@ -215,7 +231,7 @@ class Product
 
     public function removePhoto(ProductPhoto $productPhoto): self
     {
-        if ($this->photos->removeElement($productPhoto)) {
+        if ($this->productPhotos->removeElement($productPhoto)) {
             // set the owning side to null (unless already changed)
             if ($productPhoto->getProduct() === $this) {
                 $productPhoto->setProduct(null);

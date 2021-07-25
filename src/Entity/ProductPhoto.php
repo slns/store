@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ProductPhotoRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 
 /**
  * @ORM\Entity(repositoryClass=ProductPhotoRepository::class)
@@ -61,6 +62,9 @@ class ProductPhoto
         return $this->createdAt;
     }
 
+    /**
+     * @throws Exception
+     */
     public function setCreatedAt(): self
     {
         $this->createdAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon'));
@@ -73,6 +77,9 @@ class ProductPhoto
         return $this->updatedAt;
     }
 
+    /**
+     * @throws Exception
+     */
     public function setUpdatedAt(): self
     {
         $this->updatedAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Lisbon'));
